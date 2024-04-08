@@ -17,5 +17,5 @@ spring:
       ddl-auto: update
 
   jwt:
-    secret: anjaehyunUsingForTest #원래는 공개하면 안됨.
+    secret: storebookingtest #원래는 공개하면 안됨.
     time: 3600000

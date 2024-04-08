@@ -5,11 +5,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.store.booking.global.exception.impl.user.AlreadyExistUserException;
 import org.store.booking.user.domain.dto.UserCreateDto;
+import org.store.booking.user.domain.dto.UserReadDto;
 import org.store.booking.user.domain.entity.User;
 import org.store.booking.user.domain.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /****************************************************
  **                                                 **
@@ -44,5 +47,14 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+    }
+    public List<UserReadDto> findAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> {
+                    UserReadDto dto = new UserReadDto();
+                    dto.setPhoneNum(user.getUsername());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }

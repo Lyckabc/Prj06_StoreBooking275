@@ -3,13 +3,16 @@ package org.store.booking.user.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.store.booking.user.domain.dto.UserCreateDto;
+import org.store.booking.user.domain.dto.UserReadDto;
+import org.store.booking.user.domain.entity.User;
 import org.store.booking.user.service.UserService;
+
+import java.util.List;
 
 /****************************************************
  **                                                 **
@@ -20,7 +23,7 @@ import org.store.booking.user.service.UserService;
  **        https://github.com/lyckabc               **
  **                                                 **
  ****************************************************/
-//@Api(tags = "회원 컨트롤러")
+@Api(tags = "회원 컨트롤러")
 @RestController
 @RequestMapping("/shop/v1/user")
 @RequiredArgsConstructor
@@ -32,5 +35,12 @@ public class UserController {
     public ResponseEntity<String> join(@RequestBody UserCreateDto userCreateDto) {
         userService.join(userCreateDto);
         return ResponseEntity.ok("join successfully");
+    }
+
+    @ApiOperation(value = "회원 목록", notes = "모든 회원들의 목록(아이디,비번) 열람")
+    @GetMapping("/list")
+    public ResponseEntity<List<UserReadDto>> list() {
+        List<UserReadDto> users = userService.findAllUsers();
+        return ResponseEntity.ok(users);
     }
 }
