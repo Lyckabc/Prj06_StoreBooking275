@@ -3,6 +3,7 @@ package org.store.booking.user.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.store.booking.global.config.JwtTokenProvider;
 import org.store.booking.global.exception.impl.user.AlreadyExistUserException;
 import org.store.booking.global.exception.impl.user.NotExistUserException;
 import org.store.booking.global.exception.impl.user.PasswordNotMatchException;
@@ -32,6 +33,8 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+
 
     //Register
     @Transactional
@@ -76,5 +79,14 @@ public class UserService {
         } else {
             throw new NotExistUserException();
         }
+    }
+
+    public String login(UserCreateDto userCreateDto) {
+        User user = userRepository.findByUserPhoneNum(userCreateDto.getUserPhoneNum())
+                .orElseThrow(NotExistUserException::new);
+        if (!passwordEncoder.matches(userCreateDto.getUserPassword(), user.getUserPassword())) {
+            throw new PasswordNotMatchException();
+        }
+        return jwtTokenProvider.createToken(user.getUserPhoneNum(), user.getRoles());
     }
 }

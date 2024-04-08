@@ -51,4 +51,10 @@ public class UserController {
         userService.deleteUser(userDeleteDto.getUserPhoneNum(), userDeleteDto.getUserPassword());
         return ResponseEntity.ok("delete successfully");
     }
+
+    @ApiOperation(value = "로그인", notes = "jwt 토큰을 사용하여 로그인시 토큰을 부여합니다.")
+    @PostMapping("/login")
+    public String login(@RequestBody UserCreateDto userCreateDto) {
+        return "Bearer " + userService.login(userCreateDto);
+    }
 }
