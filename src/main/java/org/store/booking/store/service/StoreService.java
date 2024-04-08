@@ -12,6 +12,10 @@ import org.store.booking.store.domain.entity.Store;
 import org.store.booking.store.domain.repository.StoreRepository;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /****************************************************
  **                                                 **
@@ -57,5 +61,26 @@ public class StoreService {
         } else {
             throw new UnauthorizedException();
         }
+    }
+
+    //Store all inquiry
+    //상점 조회
+    public List<Map<String, Object>> getAllStores() {
+        List<Store> stores = storeRepository.findAll();
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Store store : stores) { // 원하는 정보만 가져올 수 있도록 (필요없는 등록일자, 수정일자등은 삭제)
+            Map<String, Object> storeInfo = new HashMap<>();
+//            storeInfo.put("storeId", store.getStoreId());
+            storeInfo.put("storeName", store.getStoreName());
+            storeInfo.put("storeLocation", store.getStoreLocation());
+            storeInfo.put("storeDescription",store.getStoreDescription());
+//            storeInfo.put("distance",store.getDistance());
+            storeInfo.put("rating", store.getAverageRating());
+            storeInfo.put("reviewCount", store.getTotalReviewCount());
+            result.add(storeInfo);
+        }
+
+        return result;
     }
 }

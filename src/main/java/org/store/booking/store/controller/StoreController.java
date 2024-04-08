@@ -5,14 +5,13 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.store.booking.store.domain.dto.StoreDto;
 import org.store.booking.store.service.StoreService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 /****************************************************
  **                                                 **
@@ -42,5 +41,12 @@ public class StoreController {
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only ADMIN users can register a store.");
         }
+    }
+
+    // 모든 매장 정보 확인
+    @ApiOperation(value = "상점 전체 조회", notes = "모든 매장의 목록을 확인합니다.")
+    @GetMapping("/view")
+    public List<Map<String, Object>> getAllStores() {
+        return storeService.getAllStores();
     }
 }
