@@ -1,0 +1,21 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    url: jdbc:mysql://localhost:3306/store
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1q!1q!12!
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      format_sql: true
+      ddl-auto: update
+
+  jwt:
+    secret: anjaehyunUsingForTest #원래는 공개하면 안됨.
+    time: 3600000

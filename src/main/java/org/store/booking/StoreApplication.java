@@ -1,5 +1,9 @@
 package org.store.booking;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
 /****************************************************
  **                                                 **
  **        Default (Template) Project                          **
@@ -9,8 +13,11 @@ package org.store.booking;
  **        https://github.com/lyckabc               **
  **                                                 **
  ****************************************************/
+
+@SpringBootApplication
+@EnableJpaAuditing
 public class StoreApplication {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        SpringApplication.run(StoreApplication.class, args);
     }
 }

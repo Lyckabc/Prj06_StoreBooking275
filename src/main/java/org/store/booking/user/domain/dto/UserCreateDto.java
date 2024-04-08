@@ -1,15 +1,23 @@
-package org.store.booking.global.exception;
+package org.store.booking.user.domain.dto;
+
+import lombok.*;
 
 /****************************************************
  **                                                 **
  **        Prj06_StoreBooking275                          **
- **        AbstractException                                  **
+ **        UserCreateDto                                  **
  **        Made by dong-hoshin                          **
- **        4/8/24 :13:39                         **
+ **        4/8/24 :13:57                         **
  **        https://github.com/lyckabc               **
  **                                                 **
  ****************************************************/
-public abstract class AbstractException extends RuntimeException{
-    abstract public int getStatusCode();
-    abstract public String getMessage();
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class UserCreateDto {
+    private String userPhoneNum;//유저 휴대폰 번호 겸 아이디
+    private String userPassword;//유저 비밀번호
 }
+
