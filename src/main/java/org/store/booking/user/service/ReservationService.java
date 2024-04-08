@@ -5,13 +5,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.store.booking.global.config.JwtTokenProvider;
 import org.store.booking.global.exception.impl.store.NotExistStoreException;
+import org.store.booking.global.exception.impl.user.NotExistUserException;
 import org.store.booking.store.domain.entity.Store;
 import org.store.booking.store.domain.repository.StoreRepository;
+import org.store.booking.type.EarlyCheck;
 import org.store.booking.user.domain.entity.Reservation;
 import org.store.booking.user.domain.repository.ReservationRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /****************************************************
  **                                                 **
@@ -52,5 +55,21 @@ public class ReservationService {
 
         // 예약 데이터를 데이터베이스에 저장
         reservationRepository.save(reservation);
+    }
+
+    //10분전에 와서 확인
+    @Transactional
+    public void checkReservation(String userPhoneNum) {
+        if (userPhoneNum != null && !userPhoneNum.isEmpty()) {
+            LocalDateTime now = LocalDateTime.now();
+            List<Reservation> reservations = reservationRepository.findByUserPhoneNumAndReservationTimeBefore(userPhoneNum, now);
+
+            for (Reservation reservation : reservations) {
+                reservation.setComeCheck(EarlyCheck.COME);
+                reservationRepository.save(reservation);
+            }
+        } else {
+            throw new NotExistUserException();
+        }
     }
 }

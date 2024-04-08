@@ -5,10 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.store.booking.user.service.ReservationService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,5 +36,13 @@ public class ReservationController {
             HttpServletRequest request) {
         reservationService.createReservation(storeName, reservationTime, request);
         return ResponseEntity.ok("createReservation successfully.");
+    }
+
+    // 예약 체크
+    @ApiOperation(value = "10분전 예약 확인", notes = "예약시간 10분전에 키오스크를 통해 가게에 도착했다는 인증을 합니다.")
+    @GetMapping("/check")
+    public ResponseEntity<String> checkReservation(@RequestParam("userPhoneNum") String userPhoneNum) {
+        reservationService.checkReservation(userPhoneNum);
+        return ResponseEntity.ok("checkReservation successfully.");
     }
 }
