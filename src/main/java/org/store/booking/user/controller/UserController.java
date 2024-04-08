@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.store.booking.user.domain.dto.UserCreateDto;
+import org.store.booking.user.domain.dto.UserDeleteDto;
 import org.store.booking.user.domain.dto.UserReadDto;
 import org.store.booking.user.domain.entity.User;
 import org.store.booking.user.service.UserService;
@@ -42,5 +43,12 @@ public class UserController {
     public ResponseEntity<List<UserReadDto>> list() {
         List<UserReadDto> users = userService.findAllUsers();
         return ResponseEntity.ok(users);
+    }
+
+    @ApiOperation(value = "회원 탈퇴", notes = "아이디(휴대폰 번호), 비밀번호를 통해 회원탈퇴 요청을 보냅니다.")
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteUser(@RequestBody UserDeleteDto userDeleteDto) {
+        userService.deleteUser(userDeleteDto.getUserPhoneNum(), userDeleteDto.getUserPassword());
+        return ResponseEntity.ok("delete successfully");
     }
 }

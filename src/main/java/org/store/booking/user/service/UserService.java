@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.store.booking.global.exception.impl.user.AlreadyExistUserException;
+import org.store.booking.global.exception.impl.user.NotExistUserException;
+import org.store.booking.global.exception.impl.user.PasswordNotMatchException;
 import org.store.booking.user.domain.dto.UserCreateDto;
 import org.store.booking.user.domain.dto.UserReadDto;
 import org.store.booking.user.domain.entity.User;
@@ -12,6 +14,7 @@ import org.store.booking.user.domain.repository.UserRepository;
 import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /****************************************************
@@ -48,6 +51,8 @@ public class UserService {
 
         userRepository.save(user);
     }
+
+    //Read list
     public List<UserReadDto> findAllUsers() {
         return userRepository.findAll().stream()
                 .map(user -> {
@@ -56,5 +61,20 @@ public class UserService {
                     return dto;
                 })
                 .collect(Collectors.toList());
+    }
+
+    //Remove User
+    public void deleteUser(String userPhoneNum, String password) {
+        Optional<User> optionalUser = userRepository.findByUserPhoneNum(userPhoneNum);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (passwordEncoder.matches(password, user.getUserPassword())) {
+                userRepository.delete(user);
+            } else {
+                throw new PasswordNotMatchException();
+            }
+        } else {
+            throw new NotExistUserException();
+        }
     }
 }
