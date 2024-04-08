@@ -1,5 +1,9 @@
 package org.store.booking.store.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.store.booking.global.config.JwtTokenProvider;
 import org.store.booking.global.exception.impl.role.UnauthorizedException;
 import org.store.booking.global.exception.impl.store.AlreadyExistStoreException;
@@ -18,9 +22,14 @@ import javax.servlet.http.HttpServletRequest;
  **        https://github.com/lyckabc               **
  **                                                 **
  ****************************************************/
+@Service
+@RequiredArgsConstructor
+@Slf4j
+
 public class StoreService {
     private final StoreRepository storeRepository;
     private final JwtTokenProvider jwtTokenProvider;
+
 
     //상점 등록
     public boolean registerStore(StoreDto storeDto, HttpServletRequest request) {
